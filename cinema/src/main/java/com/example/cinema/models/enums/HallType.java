@@ -1,0 +1,8 @@
+package com.example.cinema.models.enums;
+
+public enum HallType {
+    TWO_DIEMENSIONAL_BIGHALL,
+    TWO_DIEMENSIONAL_SMALLHALL,
+    THREE_DIEMENSIONAL_BIGHALL,
+    THREE_DIEMENSIONAL_SMALLHALL,
+}
