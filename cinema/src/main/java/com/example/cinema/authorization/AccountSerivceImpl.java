@@ -21,6 +21,7 @@ public class AccountSerivceImpl implements AccountService {
         } else {
             String realPassword = cinema.getPassword();
             String password = request.getPassword();
+
             if (password.equals(realPassword)) {
                 return new Response("Успешный вход в аккаунт");
             } else {
@@ -28,4 +29,11 @@ public class AccountSerivceImpl implements AccountService {
             }
         }
     }
-}
+
+
+
+
+
+
+    }
+
