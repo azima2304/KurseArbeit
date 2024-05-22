@@ -3,6 +3,7 @@ package com.example.cinema.service.impl;
 import com.example.cinema.exceptions.NotFoundByDate;
 import com.example.cinema.models.dto.response.CinemaR.*;
 import com.example.cinema.models.dto.response.FilmR.FilmsResponse;
+import com.example.cinema.repo.HallRepo;
 import com.example.cinema.utils.Language;
 import com.example.cinema.base.BaseServiceImpl;
 import com.example.cinema.exceptions.NotFoundByIDException;
@@ -87,6 +88,7 @@ public class CinemaServiceImpl extends BaseServiceImpl<Cinema, CinemaDto, Cinema
         List<HallResponse> hallResponses = new ArrayList<>();
         for (Hall hall : hallService.findByCinemaId(idCinema)) {
             HallResponse hallResponse = new HallResponse();
+            hallResponse.setId(hall.getId());
             hallResponse.setName(hall.getName());
 
             List<SessionResponse> sessionResponses = new ArrayList<>();
@@ -95,6 +97,7 @@ public class CinemaServiceImpl extends BaseServiceImpl<Cinema, CinemaDto, Cinema
                     throw new NotFoundByDate(ResourceBundle.periodMessages("notFoundByDate", language));
                 }
                 SessionResponse sessionResponse = new SessionResponse();
+                sessionResponse.setId(session.getId());
                 sessionResponse.setFilmName(session.getFilm().getName());
                 sessionResponse.setLocalDate(session.getDate());
                 sessionResponse.setLocalTime(session.getTime());

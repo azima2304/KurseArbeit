@@ -334,7 +334,7 @@
 								<h3 id="cinema-name">Cinema Name</h3>
 								<div class="movie-dates">
 									<button class="dates" onclick="loadSessions('today')">Today</button>
-									<button class="dates" onclick="loadSessions('tomorrow')">Tomorrow</button>
+									<button class="dates" onclick="loadSessions(formattedDatetmr,cinemaId)">Tomorrow</button>
 								</div>
 								<div class="movies" id="movies">
 									<!-- Sessions will be loaded here -->
@@ -372,6 +372,14 @@
             (today.getMonth() + 1).toString().padStart(2, '0'), // Месяц (январь = 0)
             today.getFullYear()  // Год
         ].join('-');
+        const tomorrow = new Date(today);
+		tomorrow.setDate(today.getDate() + 1);
+
+		const formattedDatetmr = [
+			tomorrow.getDate().toString().padStart(2, '0'),    // День
+			(tomorrow.getMonth() + 1).toString().padStart(2, '0'), // Месяц (январь = 0)
+			tomorrow.getFullYear()  // Год
+		].join('-');
         loadSessions(formattedDate, cinemaId);
     });
 
@@ -386,7 +394,6 @@
                 data.hallResponse.forEach(hall => {
                     const hallDiv = document.createElement('div');
                     hallDiv.innerHTML = `<h4>${hall.name}</h4>`;
-
                     hall.sessionResponse.forEach(session => {
                         const sessionDiv = document.createElement('div');
                         sessionDiv.classList.add('movie');
@@ -394,8 +401,8 @@
                             <div>${session.localTime}</div>
                             <a class="name" href="#">${session.filmName}</a>
                             <div class="price">${session.price} s</div>
-                            <img class="details" src="images/details.png" alt="Details">
-                            <a href="#">Buy</a>
+                            <img class="details" src=${session.price} alt="Details">
+                            <a href="seatsbooking?sessionId=${session.id}&hallId=${hall.id}&cinemaId=${cinemaId}">Buy</a>
                         `;
                         hallDiv.appendChild(sessionDiv);
                     });

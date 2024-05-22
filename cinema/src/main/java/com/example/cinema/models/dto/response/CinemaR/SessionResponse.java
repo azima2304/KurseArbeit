@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SessionResponse {
+    Long id;
     String filmName;
     LocalDate localDate;
     LocalTime localTime;

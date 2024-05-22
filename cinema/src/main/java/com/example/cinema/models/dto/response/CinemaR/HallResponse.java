@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class HallResponse {
+    Long id;
     String name;
     List<SessionResponse> sessionResponse;
 }

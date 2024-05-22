@@ -28,12 +28,14 @@ public class ControllerForHtml {
 //    public String showSeatsBookingPage() {
 //        return "seatsbooking"; // имя файла без расширения
 //    }
-    @GetMapping("/seatsbooking")
-    public String showSeatsBookingPage(Model model) {
-        // Добавьте любые атрибуты, которые вы хотите передать на страницу
-        model.addAttribute("title", "Seats Booking");
-        return "seatsbooking";
-    }
+@GetMapping("/seatsbooking")
+public String showSeatsBookingPage(@RequestParam(name = "sessionId") Long id,@RequestParam(name = "hallId") Long hallid,@RequestParam(name = "cinemaId") Long cinemaId, Model model) {
+    model.addAttribute("sessionId", id);
+    model.addAttribute("hallId", hallid);
+    model.addAttribute("cinemaId", cinemaId);
+
+    return "seatsbooking";
+}
 
     @GetMapping("/cinemas")
     public String showSeatsCinemasPage(Model model) {
