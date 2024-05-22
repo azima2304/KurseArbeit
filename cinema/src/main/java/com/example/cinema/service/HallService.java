@@ -14,4 +14,5 @@ public interface HallService extends BaseService<HallDto> {
 
     List<Hall> findByCinemaId(Long cinemaId);
 
+    int[][] getHallLayoutById(Long hallId);
 }

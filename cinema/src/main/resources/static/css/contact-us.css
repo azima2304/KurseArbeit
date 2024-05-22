@@ -1,0 +1,14 @@
+.content{
+    height: 90vh ;
+}
+
+.error {
+    display: flex;
+    border: 1px solid white;
+    width: fit-content;
+    height: fit-content;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #ff4046;
+    color: black;
+}

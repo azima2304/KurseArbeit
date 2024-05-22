@@ -17,7 +17,7 @@ public interface CinemaRepo extends BaseRepo<Cinema> {
     @Query("SELECT c from Cinema c where c.id=:idCinema")
     Cinema findByIdCinema(@Param ("idCinema") Long idCinema);
 
-    @Query("SELECT c.logo as logo, c.name as name, c.address as address from Cinema c ")
+    @Query("SELECT c.id as id,c.logo as logo, c.name as name, c.address as address from Cinema c ")
     Page<CinemasResponse> getAllCinemas(Pageable pageable);
 
     Cinema findCinemasByUsername(String username);

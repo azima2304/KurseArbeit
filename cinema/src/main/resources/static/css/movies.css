@@ -1,0 +1,71 @@
+.dates{
+    height: 31px;
+    width: 70px;
+    padding: 4px;
+   border-radius: 10px;
+   background-color: black;
+   color: rgb(212, 35, 56);
+   border-color:  rgb(212, 35, 56);
+}
+.inner{
+    width: 600px;
+
+}
+.border-left{
+    display: flex;
+}
+
+.dates:hover{
+
+    background-color: rgb(212, 35, 56);
+    color: white;
+}
+.price{
+    display: flex;
+}
+
+.price-som{
+    font-weight: 500;
+    text-decoration: underline;
+}
+.details{
+    width: 30px;
+}
+.movies{
+    align-items: center;
+    display: flex;
+    height: 35px;
+    gap: 12px;
+    box-sizing: border-box;
+
+}
+.movie-info{
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    align-items: center;
+    height: 100%;
+    padding: 6px;
+    text-align: center;
+
+}
+.movies p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.movie-info img{
+    height: 300px;
+    width: 189px;
+}
+.name{
+    width:325px ;
+    margin-left: 20px;
+    color: white;
+}
+
+.movie-info div{
+    width: fit-content;
+}
+

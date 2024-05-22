@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CinemaResponse {
+    Long id;
     String logo;
     String name;
     List<HallResponse> hallResponse;

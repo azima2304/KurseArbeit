@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Seats Booking</title>
+
+    <!--    <title>Cinema Seat Reservation</title>-->
+    <style>
+
+        .seat {
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            background-color: #ccc;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .seat.selected {
+            background-color: #ff6666; /* Цвет выбранных сидений */
+        }
+    </style>
+</head>
+<body>
+<h2>Cinema Seat Reservation</h2>
+<div id="seats">
+<!--    // Получаем информацию о местах в зале через API-->
+<!--    fetch(`/api/halls/${hallId}/layout`)-->
+<!--    .then(response => response.json())-->
+<!--    .then(data => {-->
+<!--    const rows = data.length;-->
+<!--    const columns = data[0].length;-->
+
+<!--    for (let i = 0; i < rows; i++) {-->
+<!--    for (let j = 0; j < columns; j++) {-->
+<!--    const seat = document.createElement('div');-->
+<!--    seat.classList.add('seat');-->
+<!--    seat.textContent = `${i + 1}${String.fromCharCode(65 + j)}`; // Пример метки места: 1A, 1B, 1C, и т.д.-->
+<!--    if (data[i][j] === 0) { // Если место свободно (значение 0), делаем его кликабельным-->
+<!--    seat.addEventListener('click', () => {-->
+<!--    seat.classList.toggle('selected');-->
+<!--    if (seat.classList.contains('selected')) {-->
+<!--    selectedSeats++;-->
+<!--    } else {-->
+<!--    selectedSeats&#45;&#45;;-->
+<!--    }-->
+<!--    selectedSeatsContainer.textContent = selectedSeats;-->
+<!--    });-->
+<!--    } else { // Если место занято (значение 1), делаем его серым и не кликабельным-->
+<!--    seat.classList.add('occupied');-->
+<!--    }-->
+<!--    seatsContainer.appendChild(seat);-->
+<!--    }-->
+<!--    seatsContainer.appendChild(document.createElement('br'));-->
+<!--    }-->
+<!--    })-->
+<!--    .catch(error => console.error('Error fetching hall layout:', error));-->
+
+</div>
+
+<p>Selected Seats: <span id="selected-seats">0</span></p>
+<p>
+    Email: <input type="email" id="client-email" required>
+</p>
+<button onclick="bookSeats()">Book Selected Seats</button>
+
+<script>
+    const seatsContainer = document.getElementById('seats');
+    const selectedSeatsContainer = document.getElementById('selected-seats');
+    let selectedSeats = 0;
+
+    // надо поменять на автоматическое присвоение сессии айди
+    const idSession = 4;
+
+    // Создаем места в кинотеатре тож надо заменить на автоматическое считывание количества мест для отрисовки
+    for (let i = 1; i <= 10; i++) {
+        for (let j = 1; j <= 10; j++) {
+            const seat = document.createElement('div');
+            seat.classList.add('seat');
+            seat.textContent = `${i}${String.fromCharCode(64 + j)}`; // Пример метки места: 1A, 1B, 1C, и т.д.
+            seat.addEventListener('click', () => {
+                seat.classList.toggle('selected');
+                if (seat.classList.contains('selected')) {
+                    selectedSeats++;
+                } else {
+                    selectedSeats--;
+                }
+                selectedSeatsContainer.textContent = selectedSeats;
+            });
+            seatsContainer.appendChild(seat);
+        }
+        seatsContainer.appendChild(document.createElement('br'));
+    }
+
+function bookSeats() {
+    const emailInput = document.getElementById('client-email');
+    const clientEmail = emailInput.value;
+
+    if (!clientEmail) {
+        alert('Please enter your email.');
+        return;
+    }
+
+    const selectedSeatsList = document.querySelectorAll('.seat.selected');
+    const seatsArray = Array.from(selectedSeatsList).map(seat => {
+        const row = parseInt(seat.textContent.substring(0, seat.textContent.length - 1)); // Предполагается, что первый символ - это номер ряда
+        const place = seat.textContent.charCodeAt(seat.textContent.length - 1) - 64; // Второй символ - буква, преобразуем в номер
+        return { place: place, row: row, type: "ADULTS" }; // Предположим, что тип всегда ADULTS
+    });
+
+    const requestData = {
+        clientEmail: clientEmail,
+        idSession: 4, // Предположим, что ID сеанса берется автоматически или хранится где-то еще
+        seats: seatsArray
+    };
+
+    const url = 'http://localhost:8050/api/orderSession/create?language=EN';
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function() {
+        if (xhr.status === 201) {
+            const response = JSON.parse(xhr.responseText);
+            alert(`Seats booked successfully!\nFilm: ${response.filmName}\nCinema: ${response.cinemaName}\nHall: ${response.hallName}\nTotal Price: ${response.totalPrice}\nEmail: ${response.clientEmail}`);
+        } else {
+            alert('Failed to book seats.');
+        }
+    };
+    xhr.send(JSON.stringify(requestData));
+}
+</script>
+</body>
+</html>

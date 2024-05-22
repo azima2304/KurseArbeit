@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Cinema</title>
+	<link rel="stylesheet" href="/static/css/style.css">
+
+	<script src="/static/js/jquery-1.4.2.min.js" type="text/javascript"></script>
+	<script src="/static/js/cufon-yui.js" type="text/javascript"></script>
+	<script src="/static/js/cufon-replace.js" type="text/javascript"></script>
+	<script src="/static/js/Gill_Sans_400.font.js" type="text/javascript"></script>
+	<script src="/static/js/script.js" type="text/javascript"></script>
+</head>
+<body id="page3">
+<div id="content">
+	<div class="line-hor"></div>
+	<div class="box">
+		<div class="border-right">
+			<div class="border-left">
+
+			</div>
+		</div>
+	</div>
+	<div class="content">
+		<h3><span>Cinemas</span></h3>
+		<ul class="list" id="cinema-list">
+			<!-- Сюда будут добавляться кинотеатры -->
+		</ul>
+	</div>
+</div>
+<script>
+	// Function to fetch cinemas
+    function fetchCinemas() {
+        fetch('http://localhost:8050/api/cinema/get/cinemas?limit=10&offset=0')
+            .then(response => response.json())
+            .then(data => {
+                const cinemaList = document.getElementById('cinema-list');
+                cinemaList.innerHTML = ''; // Clear existing cinema list
+
+                data.forEach(cinema => {
+                    const li = document.createElement('li');
+                    const img = document.createElement('img');
+                    img.src = cinema.logo;
+                    img.alt = cinema.name;
+
+                    const a = document.createElement('a');
+                    // Ensure cinema.id exists before using it in the URL
+                    if (cinema.id) {
+						const today = new Date();
+						const formattedDate = [
+							today.getDate().toString().padStart(2, '0'),    // День
+							(today.getMonth() + 1).toString().padStart(2, '0'), // Месяц (январь = 0)
+							today.getFullYear()  // Год
+						].join('-');
+<!--                        a.href = `article?${cinema.id}`;-->
+    					a.href = `article?cinemaId=${cinema.id}&date=${formattedDate}`;
+
+                    } else {
+                        // Handle case where cinema.id is missing (optional)
+                        console.warn("Cinema object missing ID:", cinema);
+                        // You can prevent linking or display an error message here
+                    }
+                    a.textContent = cinema.name;
+
+                    const br = document.createElement('br');
+                    const address = document.createTextNode('Address: ' + cinema.address);
+
+                    li.appendChild(img);
+                    li.appendChild(a);
+                    li.appendChild(br);
+                    li.appendChild(address);
+
+                    // Add event listener to the cinema link
+                    a.addEventListener('click', function(event) {
+                        event.preventDefault(); // Prevent default link behavior
+
+                        const cinemaId = this.href.split('cinemaId=')[1]; // Extract cinema ID from URL
+                        fetchSessions(cinemaId)
+                            .then(() => {
+                                // After fetching sessions, navigate to the article.html page
+                                window.location.href = this.href;
+                            })
+                            .catch(error => {
+                                console.error('Error fetching sessions:', error);
+                            });
+                    });
+
+                    cinemaList.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching cinemas:', error);
+            });
+    }
+
+    // Function to fetch sessions for a given cinema ID
+    function fetchSessions(cinemaId) {
+        const today = new Date();
+        const formattedDate = [
+            today.getDate().toString().padStart(2, '0'),    // День
+            (today.getMonth() + 1).toString().padStart(2, '0'), // Месяц (январь = 0)
+            today.getFullYear()  // Год
+        ].join('-');
+        return fetch(`http://localhost:8050/api/cinema/get/session/by/cinema/${cinemaId}?date=${formattedDate}&language=EN`)
+            .then(response => response.json())
+            .then(data => {
+                localStorage.setItem('sessionsData', JSON.stringify(data));
+                console.log('Sessions:', data); // Replace with actual session display logic
+            })
+            .catch(error => {
+                console.error('Error fetching sessions:', error);
+            });
+    }
+
+    // Call fetchCinemas on page load
+    window.onload = fetchCinemas;
+</script>
+
+<!--<script>-->
+<!--	// Function to fetch cinemas-->
+<!--function fetchCinemas() {-->
+<!--  fetch('http://localhost:8050/api/cinema/get/cinemas?limit=10&offset=0')-->
+<!--    .then(response => response.json())-->
+<!--    .then(data => {-->
+<!--      const cinemaList = document.getElementById('cinema-list');-->
+<!--      cinemaList.innerHTML = ''; // Clear existing cinema list-->
+
+<!--      data.forEach(cinema => {-->
+<!--        const li = document.createElement('li');-->
+<!--        const img = document.createElement('img');-->
+<!--        img.src = cinema.logo;-->
+<!--        img.alt = cinema.name;-->
+
+<!--        const a = document.createElement('a');-->
+<!--        // Ensure cinema.id exists before using it in the URL-->
+<!--        if (cinema.id) {-->
+<!--&lt;!&ndash;          a.href = `article.html?cinemaId=${cinema.id}`;&ndash;&gt;-->
+<!--        } else {-->
+<!--          // Handle case where cinema.id is missing (optional)-->
+<!--          console.warn("Cinema object missing ID:", cinema);-->
+<!--          // You can prevent linking or display an error message here-->
+<!--        }-->
+<!--        a.textContent = cinema.name;-->
+
+<!--        const br = document.createElement('br');-->
+<!--        const address = document.createTextNode('Address: ' + cinema.address);-->
+
+<!--        li.appendChild(img);-->
+<!--        li.appendChild(a);-->
+<!--        li.appendChild(br);-->
+<!--        li.appendChild(address);-->
+
+<!--        // Add event listener to the cinema link-->
+<!--        a.addEventListener('click', function(event) {-->
+
+
+<!--          const cinemaId = this.href.split('cinemaId=')[1]; // Extract cinema ID from URL-->
+<!--          fetchSessions(cinemaId)-->
+<!--            .then(() => {-->
+<!--              // After fetching sessions, navigate to the article.html page-->
+<!--              window.location.href = `article.html`;-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--              console.error('Error fetching sessions:', error);-->
+<!--            });-->
+<!--        });-->
+
+<!--        cinemaList.appendChild(li);-->
+<!--      });-->
+<!--    })-->
+<!--    .catch(error => {-->
+<!--      console.error('Error fetching cinemas:', error);-->
+<!--    });-->
+<!--}-->
+
+<!--// Function to fetch sessions for a given cinema ID-->
+<!--function fetchSessions(cinemaId) {-->
+<!--  const today = new Date();-->
+<!--  const formattedDate = [-->
+<!--    today.getDate().toString().padStart(2, '0'),    // День-->
+<!--    (today.getMonth() + 1).toString().padStart(2, '0'), // Месяц (январь = 0)-->
+<!--    today.getFullYear()  // Год-->
+<!--  ].join('-');-->
+<!--  return fetch(`http://localhost:8050/api/cinema/get/session/by/cinema/${cinemaId}?date=${formattedDate}&language=EN`)-->
+<!--    .then(response => response.json())-->
+<!--    .then(data => {-->
+<!--      // Display the fetched sessions for the cinema-->
+<!--      console.log('Sessions:', data); // Replace with actual session display logic-->
+<!--    })-->
+<!--    .catch(error => {-->
+<!--      console.error('Error fetching sessions:', error);-->
+<!--    });-->
+<!--}-->
+
+<!--// Call fetchCinemas on page load-->
+<!--window.onload = fetchCinemas;-->
+
+<!--	// Function to fetch cinemas-->
+<!--&lt;!&ndash;    function fetchCinemas() {&ndash;&gt;-->
+<!--&lt;!&ndash;      fetch('http://localhost:8050/api/cinema/get/cinemas?limit=10&offset=0')&ndash;&gt;-->
+<!--&lt;!&ndash;        .then(response => response.json())&ndash;&gt;-->
+<!--&lt;!&ndash;        .then(data => {&ndash;&gt;-->
+<!--&lt;!&ndash;          const cinemaList = document.getElementById('cinema-list');&ndash;&gt;-->
+<!--&lt;!&ndash;          cinemaList.innerHTML = ''; // Clear existing cinema list&ndash;&gt;-->
+
+<!--&lt;!&ndash;          data.forEach(cinema => {&ndash;&gt;-->
+<!--&lt;!&ndash;            const li = document.createElement('li');&ndash;&gt;-->
+<!--&lt;!&ndash;            const id=document.createElement('id');&ndash;&gt;-->
+<!--&lt;!&ndash;            const img = document.createElement('img');&ndash;&gt;-->
+<!--&lt;!&ndash;            img.src = cinema.logo;&ndash;&gt;-->
+<!--&lt;!&ndash;            img.alt = cinema.name;&ndash;&gt;-->
+<!--&lt;!&ndash;            id.textContent=cinema.id;&ndash;&gt;-->
+
+<!--&lt;!&ndash;            const a = document.createElement('a');&ndash;&gt;-->
+<!--&lt;!&ndash;            // Ensure cinema.id exists before using it in the URL&ndash;&gt;-->
+<!--&lt;!&ndash;            if (cinema.id) {&ndash;&gt;-->
+<!--&lt;!&ndash;              a.href = `article.html?cinemaId=${cinema.id}`;&ndash;&gt;-->
+
+<!--&lt;!&ndash;            } else {&ndash;&gt;-->
+<!--&lt;!&ndash;              // Handle case where cinema.id is missing (optional)&ndash;&gt;-->
+<!--&lt;!&ndash;              console.warn("Cinema object missing ID:", cinema);&ndash;&gt;-->
+<!--&lt;!&ndash;              // You can prevent linking or display an error message here&ndash;&gt;-->
+<!--&lt;!&ndash;            }&ndash;&gt;-->
+<!--&lt;!&ndash;            a.textContent = cinema.name;&ndash;&gt;-->
+
+<!--&lt;!&ndash;            const br = document.createElement('br');&ndash;&gt;-->
+<!--&lt;!&ndash;            const address = document.createTextNode('Address: ' + cinema.address);&ndash;&gt;-->
+
+<!--&lt;!&ndash;            li.appendChild(img);&ndash;&gt;-->
+<!--&lt;!&ndash;            li.appendChild(a);&ndash;&gt;-->
+<!--&lt;!&ndash;            li.appendChild(br);&ndash;&gt;-->
+<!--&lt;!&ndash;            li.appendChild(id);&ndash;&gt;-->
+<!--&lt;!&ndash;            li.appendChild(br);&ndash;&gt;-->
+<!--&lt;!&ndash;            li.appendChild(address);&ndash;&gt;-->
+
+<!--&lt;!&ndash;            // Add event listener to the cinema link&ndash;&gt;-->
+<!--&lt;!&ndash;            a.addEventListener('click', function(event) {&ndash;&gt;-->
+<!--&lt;!&ndash;              event.preventDefault(); // Prevent default link behavior&ndash;&gt;-->
+
+<!--&lt;!&ndash;              const cinemaId = this.href.split('cinemaId=')[1]; // Extract cinema ID from URL&ndash;&gt;-->
+<!--&lt;!&ndash;              fetchSessions(cinemaId).then(() => {&ndash;&gt;-->
+<!--&lt;!&ndash;            					// After fetching sessions, navigate to the article.html page&ndash;&gt;-->
+<!--&lt;!&ndash;				window.location.href = this.href;&ndash;&gt;-->
+<!--&lt;!&ndash;				});&ndash;&gt;-->
+<!--&lt;!&ndash;            });&ndash;&gt;-->
+
+<!--&lt;!&ndash;            cinemaList.appendChild(li);&ndash;&gt;-->
+<!--&lt;!&ndash;          });&ndash;&gt;-->
+<!--&lt;!&ndash;        })&ndash;&gt;-->
+<!--&lt;!&ndash;        .catch(error => {&ndash;&gt;-->
+<!--&lt;!&ndash;          console.error('Error fetching cinemas:', error);&ndash;&gt;-->
+<!--&lt;!&ndash;        });&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+<!--&lt;!&ndash;    // Function to fetch sessions for a given cinema ID&ndash;&gt;-->
+<!--&lt;!&ndash;	function fetchSessions(cinemaId) {&ndash;&gt;-->
+<!--&lt;!&ndash;  	const today = new Date();&ndash;&gt;-->
+<!--&lt;!&ndash;	const formattedDate = [&ndash;&gt;-->
+<!--&lt;!&ndash;	  today.getDate().toString().padStart(2, '0'),    // День&ndash;&gt;-->
+<!--&lt;!&ndash;	  (today.getMonth() + 1).toString().padStart(2, '0'), // Месяц (январь = 0)&ndash;&gt;-->
+<!--&lt;!&ndash;	  today.getFullYear()  // Год&ndash;&gt;-->
+<!--&lt;!&ndash;	].join('-');&ndash;&gt;-->
+<!--&lt;!&ndash;	  fetch(`http://localhost:8050/api/cinema/get/session/by/cinema/${cinemaId}?date=${formattedDate}&language=EN`)&ndash;&gt;-->
+<!--&lt;!&ndash;		.then(response => response.json())&ndash;&gt;-->
+<!--&lt;!&ndash;		.then(data => {&ndash;&gt;-->
+<!--&lt;!&ndash;		  // Display the fetched sessions for the cinema&ndash;&gt;-->
+<!--&lt;!&ndash;		  console.log('Sessions:', data); // Replace with actual session display logic&ndash;&gt;-->
+<!--&lt;!&ndash;		})&ndash;&gt;-->
+<!--&lt;!&ndash;		.catch(error => {&ndash;&gt;-->
+<!--&lt;!&ndash;		  console.error('Error fetching sessions:', error);&ndash;&gt;-->
+<!--&lt;!&ndash;		});&ndash;&gt;-->
+<!--&lt;!&ndash;	}&ndash;&gt;-->
+<!--&lt;!&ndash;    // Call fetchCinemas on page load&ndash;&gt;-->
+<!--&lt;!&ndash;    window.onload = fetchCinemas;&ndash;&gt;-->
+
+<!--</script>-->
+</body>
+</html>
