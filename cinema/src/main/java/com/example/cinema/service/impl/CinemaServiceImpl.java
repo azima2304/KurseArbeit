@@ -83,6 +83,7 @@ public class CinemaServiceImpl extends BaseServiceImpl<Cinema, CinemaDto, Cinema
         if (cinema==null){
             throw new NotFoundByIDException(ResourceBundle.periodMessages("notFoundById", language));
         }
+        response.setId(cinema.getId());
         response.setLogo(cinema.getLogo());
         response.setName(cinema.getName());
         List<HallResponse> hallResponses = new ArrayList<>();

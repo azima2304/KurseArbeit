@@ -4,15 +4,55 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Cinema</title>
-	<link rel="stylesheet" href="/static/css/style.css">
+	<link rel="stylesheet" href="/css/style.css">
+<!--	<link href="style.css" rel="stylesheet">-->
 
-	<script src="/static/js/jquery-1.4.2.min.js" type="text/javascript"></script>
-	<script src="/static/js/cufon-yui.js" type="text/javascript"></script>
-	<script src="/static/js/cufon-replace.js" type="text/javascript"></script>
-	<script src="/static/js/Gill_Sans_400.font.js" type="text/javascript"></script>
-	<script src="/static/js/script.js" type="text/javascript"></script>
+	<script src="/js/jquery-1.4.2.min.js" type="text/javascript"></script>
+	<script src="/js/cufon-yui.js" type="text/javascript"></script>
+	<script src="/js/cufon-replace.js" type="text/javascript"></script>
+	<script src="/js/Gill_Sans_400.font.js" type="text/javascript"></script>
+	<script src="/js/script.js" type="text/javascript"></script>
+	<style>
+		.cinema-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .cinema-image {
+            width: 300px;
+            margin-right: 20px;
+        }
+
+        .info {
+            flex: 1;
+        }
+	</style>
 </head>
 <body id="page3">
+<div class="tail-top">
+	<div class="tail-bottom">
+		<div id="main">
+			<!-- HEADER -->
+			<div id="header">
+				<div class="row-1">
+					<div class="fleft"><a href="index.html">Cinema <span>World</span></a></div>
+					<ul>
+						<li><a href="index.html"><img src="/images/icon1.gif" alt="" /></a></li>
+						<li><a href="contact-us.html"><img src="/images/icon2.gif" alt="" /></a></li>
+						<li><a href="sitemap.html"><img src="/images/icon3.gif" alt="" /></a></li>
+					</ul>
+				</div>
+				<div class="row-2">
+					<ul>
+						<li><a href="index.html">Home</a></li>
+						<li><a href="about-us.html">About</a></li>
+						<li><a href="http://localhost:8050/cinemaList.html" class="active">Cinemas</a></li>
+						<li><a href="contact-us.html">Contacts</a></li>
+						<li class="last"><a href="sitemap.html">Sitemap</a></li>
+					</ul>
+				</div>
+			</div>
 <div id="content">
 	<div class="line-hor"></div>
 	<div class="box">
@@ -38,13 +78,31 @@
                 const cinemaList = document.getElementById('cinema-list');
                 cinemaList.innerHTML = ''; // Clear existing cinema list
 
-                data.forEach(cinema => {
-                    const li = document.createElement('li');
-                    const img = document.createElement('img');
-                    img.src = cinema.logo;
-                    img.alt = cinema.name;
+<!--                data.forEach(cinema => {-->
+<!--                    const li = document.createElement('li');-->
+<!--                    const img = document.createElement('img');-->
+<!--                    img.src = cinema.logo;-->
+<!--                    img.alt = cinema.name;-->
+					data.forEach(cinema => {
+						const li = document.createElement('li');
+						const div = document.createElement('div');
+						div.className = 'cinema-info';
 
-                    const a = document.createElement('a');
+						const img = document.createElement('img');
+						img.src = cinema.logo;
+						img.alt = cinema.name;
+						img.className = 'cinema-image';
+
+						const infoDiv = document.createElement('div');
+						infoDiv.className = 'info';
+
+<!--						const a = document.createElement('p');-->
+<!--						a.textContent = cinema.name;-->
+
+						const address = document.createElement('p');
+						address.textContent = 'Address: ' + cinema.address;
+
+                    	const a = document.createElement('a');
                     // Ensure cinema.id exists before using it in the URL
                     if (cinema.id) {
 						const today = new Date();
@@ -54,7 +112,7 @@
 							today.getFullYear()  // Год
 						].join('-');
 <!--                        a.href = `article?${cinema.id}`;-->
-    					a.href = `article?cinemaId=${cinema.id}&date=${formattedDate}`;
+							a.href = `/articles.html?cinemaId=${cinema.id}&date=${formattedDate}`;
 
                     } else {
                         // Handle case where cinema.id is missing (optional)
@@ -64,12 +122,20 @@
                     a.textContent = cinema.name;
 
                     const br = document.createElement('br');
-                    const address = document.createTextNode('Address: ' + cinema.address);
+<!--                    const address = document.createTextNode('Address: ' + cinema.address);-->
 
-                    li.appendChild(img);
-                    li.appendChild(a);
-                    li.appendChild(br);
-                    li.appendChild(address);
+<!--                    li.appendChild(img);-->
+<!--                    li.appendChild(a);-->
+<!--                    li.appendChild(br);-->
+<!--                    li.appendChild(address);-->
+
+                    infoDiv.appendChild(a);
+                    infoDiv.appendChild(address);
+
+                    div.appendChild(img);
+                    div.appendChild(infoDiv);
+
+                    li.appendChild(div);
 
                     // Add event listener to the cinema link
                     a.addEventListener('click', function(event) {
@@ -135,7 +201,7 @@
 <!--        const a = document.createElement('a');-->
 <!--        // Ensure cinema.id exists before using it in the URL-->
 <!--        if (cinema.id) {-->
-<!--&lt;!&ndash;          a.href = `article.html?cinemaId=${cinema.id}`;&ndash;&gt;-->
+<!--&lt;!&ndash;          a.href = `articles.html?cinemaId=${cinema.id}`;&ndash;&gt;-->
 <!--        } else {-->
 <!--          // Handle case where cinema.id is missing (optional)-->
 <!--          console.warn("Cinema object missing ID:", cinema);-->
@@ -158,8 +224,8 @@
 <!--          const cinemaId = this.href.split('cinemaId=')[1]; // Extract cinema ID from URL-->
 <!--          fetchSessions(cinemaId)-->
 <!--            .then(() => {-->
-<!--              // After fetching sessions, navigate to the article.html page-->
-<!--              window.location.href = `article.html`;-->
+<!--              // After fetching sessions, navigate to the articles.html page-->
+<!--              window.location.href = `articles.html`;-->
 <!--            })-->
 <!--            .catch(error => {-->
 <!--              console.error('Error fetching sessions:', error);-->
@@ -215,7 +281,7 @@
 <!--&lt;!&ndash;            const a = document.createElement('a');&ndash;&gt;-->
 <!--&lt;!&ndash;            // Ensure cinema.id exists before using it in the URL&ndash;&gt;-->
 <!--&lt;!&ndash;            if (cinema.id) {&ndash;&gt;-->
-<!--&lt;!&ndash;              a.href = `article.html?cinemaId=${cinema.id}`;&ndash;&gt;-->
+<!--&lt;!&ndash;              a.href = `articles.html?cinemaId=${cinema.id}`;&ndash;&gt;-->
 
 <!--&lt;!&ndash;            } else {&ndash;&gt;-->
 <!--&lt;!&ndash;              // Handle case where cinema.id is missing (optional)&ndash;&gt;-->
@@ -240,7 +306,7 @@
 
 <!--&lt;!&ndash;              const cinemaId = this.href.split('cinemaId=')[1]; // Extract cinema ID from URL&ndash;&gt;-->
 <!--&lt;!&ndash;              fetchSessions(cinemaId).then(() => {&ndash;&gt;-->
-<!--&lt;!&ndash;            					// After fetching sessions, navigate to the article.html page&ndash;&gt;-->
+<!--&lt;!&ndash;            					// After fetching sessions, navigate to the articles.html page&ndash;&gt;-->
 <!--&lt;!&ndash;				window.location.href = this.href;&ndash;&gt;-->
 <!--&lt;!&ndash;				});&ndash;&gt;-->
 <!--&lt;!&ndash;            });&ndash;&gt;-->
