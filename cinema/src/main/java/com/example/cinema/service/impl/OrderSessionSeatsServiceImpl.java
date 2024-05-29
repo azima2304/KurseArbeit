@@ -5,7 +5,6 @@ import com.example.cinema.base.BaseServiceImpl;
 import com.example.cinema.exceptions.AgeException;
 import com.example.cinema.exceptions.NotFoundByIDException;
 import com.example.cinema.exceptions.RowAndPlaceException;
-import com.example.cinema.exceptions.SessionCantBeException;
 import com.example.cinema.models.dto.*;
 import com.example.cinema.models.dto.request.OrderSessionSeatsCreateRequest;
 import com.example.cinema.models.dto.request.SeatsRequest;
@@ -36,6 +35,7 @@ public class OrderSessionSeatsServiceImpl extends BaseServiceImpl<OrderSessionSe
     private final SeatsRepo seatsRepo;
     private final SessionSeatsRepo sessionSeatsRepo;
     private final JavaMailSender javaMailSender;
+
 
     public OrderSessionSeatsServiceImpl(OrderSessionSeatsRepo rep, OrderSessionSeatsMapper orderSessionSeatsMapper, OrderRepo orderRepo, OrderService orderService, SessionRepo sessionRepo, SeatsRepo seatsRepo, SessionSeatsRepo sessionSeatsRepo, JavaMailSender javaMailSender) {
         super(rep, orderSessionSeatsMapper);
@@ -143,35 +143,27 @@ public class OrderSessionSeatsServiceImpl extends BaseServiceImpl<OrderSessionSe
                 response.setClientEmail(request.getClientEmail());
 
                 new Response(ResourceBundle.periodMessages("created", language));
+
+            sendEmail(request.getClientEmail(), response);
         }
 
         save(OrderSessionSeatsMapper.MAPPER.toDto(orderSessionSeatsDto, context));
-
-        sendOrderConfirmationEmail(response, language);
         return response;
     }
 
-
-    private void sendOrderConfirmationEmail(OrderSessionSeatsRespose response, Language language) {
+    private void sendEmail(String to, OrderSessionSeatsRespose response) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(response.getClientEmail());
-        message.setSubject(ResourceBundle.periodMessages("orderConfirmationSubject", language));
-        message.setText(buildEmailBody(response, language));
+        message.setTo(to);
+        message.setSubject("Ваш заказ на билеты");
+        message.setText("Уважаемый клиент,\n\n" +
+                "Ваш заказ был успешно создан.\n" +
+                "Фильм: " + response.getFilmName() + "\n" +
+                "Кинотеатр: " + response.getCinemaName() + "\n" +
+                "Зал: " + response.getHallName() + "\n" +
+                "Места: " + response.getSeats().toString() + "\n" +
+                "Общая стоимость: " + response.getTotalPrice() + " руб.\n\n" +
+                "Спасибо за ваш выбор!\n");
+
         javaMailSender.send(message);
     }
-
-    private String buildEmailBody(OrderSessionSeatsRespose response, Language language) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(ResourceBundle.periodMessages("orderConfirmationBody", language)).append("\n");
-        sb.append("Film: ").append(response.getFilmName()).append("\n");
-        sb.append("Cinema: ").append(response.getCinemaName()).append("\n");
-        sb.append("Hall: ").append(response.getHallName()).append("\n");
-        sb.append("Seats: ").append(response.getSeats().toString()).append("\n");
-        sb.append("Total Price: ").append(response.getTotalPrice()).append("\n");
-        sb.append("Client Email: ").append(response.getClientEmail()).append("\n");
-        return sb.toString();
-    }
-
 }
-
-

@@ -16,7 +16,7 @@ public class MailConfig {
         mailSender.setHost("smtp.gmail.com"); // Установите хост SMTP
         mailSender.setPort(587); // Установите порт
         mailSender.setUsername("bishkekcinematica@gmail.com"); // Установите ваше имя пользователя
-        mailSender.setPassword("cinematica2024"); // Установите ваш пароль
+        mailSender.setPassword("josutshklfzikfnb"); // Установите ваш пароль
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
