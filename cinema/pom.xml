@@ -83,7 +83,6 @@
 			<artifactId>feign-form-spring</artifactId>
 			<version>3.8.0</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
@@ -91,8 +90,21 @@
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>javax.mail-api</artifactId>
-			<version>1.6.2</version> <!-- Версия зависимости -->
+			<version>1.6.2</version>
 		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>jakarta.mail</artifactId>
+			<version>1.6.7</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>

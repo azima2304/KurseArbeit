@@ -20,6 +20,7 @@ import com.example.cinema.repo.*;
 import com.example.cinema.service.OrderService;
 import com.example.cinema.service.OrderSessionSeatsService;
 import com.example.cinema.utils.ResourceBundle;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import org.springframework.mail.javamail.JavaMailSender;
@@ -145,9 +146,31 @@ public class OrderSessionSeatsServiceImpl extends BaseServiceImpl<OrderSessionSe
         }
 
         save(OrderSessionSeatsMapper.MAPPER.toDto(orderSessionSeatsDto, context));
+
+        sendOrderConfirmationEmail(response, language);
         return response;
     }
 
+
+    private void sendOrderConfirmationEmail(OrderSessionSeatsRespose response, Language language) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(response.getClientEmail());
+        message.setSubject(ResourceBundle.periodMessages("orderConfirmationSubject", language));
+        message.setText(buildEmailBody(response, language));
+        javaMailSender.send(message);
+    }
+
+    private String buildEmailBody(OrderSessionSeatsRespose response, Language language) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(ResourceBundle.periodMessages("orderConfirmationBody", language)).append("\n");
+        sb.append("Film: ").append(response.getFilmName()).append("\n");
+        sb.append("Cinema: ").append(response.getCinemaName()).append("\n");
+        sb.append("Hall: ").append(response.getHallName()).append("\n");
+        sb.append("Seats: ").append(response.getSeats().toString()).append("\n");
+        sb.append("Total Price: ").append(response.getTotalPrice()).append("\n");
+        sb.append("Client Email: ").append(response.getClientEmail()).append("\n");
+        return sb.toString();
+    }
 
 }
 
