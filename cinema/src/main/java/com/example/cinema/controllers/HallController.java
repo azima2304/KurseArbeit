@@ -31,7 +31,12 @@ public class HallController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
-
+    @GetMapping("/{hallId}/layout")
+    @ApiOperation("Вывод мест в определенном зале")
+    public ResponseEntity<int[][]> getHallLayoutById(@PathVariable Long hallId) {
+        int[][] hallLayout = service.getHallLayoutById(hallId);
+        return ResponseEntity.ok(hallLayout);
+    }
 
 
 }

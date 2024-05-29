@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema Seat Reservation</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <!--	<link href="style.css" rel="stylesheet">-->
+
+    <script src="/js/jquery-1.4.2.min.js" type="text/javascript"></script>
+    <script src="/js/cufon-yui.js" type="text/javascript"></script>
+    <script src="/js/cufon-replace.js" type="text/javascript"></script>
+    <script src="/js/Gill_Sans_400.font.js" type="text/javascript"></script>
+    <script src="/js/script.js" type="text/javascript"></script>
+    <style>
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            margin: 0;-->
+<!--            padding: 20px;-->
+<!--            background-color: #f4f4f4;-->
+<!--        }-->
+<!--        h2 {-->
+<!--            color: #333;-->
+<!--            margin-bottom: 20px;-->
+<!--        }-->
+<!--        h1 {-->
+<!--            color: #333;-->
+<!--            margin-bottom: 10px;-->
+<!--        }-->
+        #seats {
+            margin-bottom: 20px;
+        }
+        .seat {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            display: inline-block;
+            border: 1px solid #ccc;
+            line-height: 50px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .booked {
+            background-color: red;
+            color: white;
+        }
+        .available {
+            background-color: green;
+            color: white;
+        }
+        .selected {
+            background-color: #ffcc00 !important;
+            color: #333;
+        }
+        #selected-seats {
+            font-weight: bold;
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        input[type="email"] {
+            padding: 8px;
+            font-size: 16px;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="tail-top">
+    <div class="tail-bottom">
+        <div id="main">
+            <!-- HEADER -->
+            <div id="header">
+                <div class="row-1">
+                    <div class="fleft"><a href="index.html">Cinema <span>World</span></a></div>
+                    <ul>
+                        <li><a href="index.html"><img src="/images/icon1.gif" alt="" /></a></li>
+                        <li><a href="contact-us.html"><img src="/images/icon2.gif" alt="" /></a></li>
+                        <li><a href="sitemap.html"><img src="/images/icon3.gif" alt="" /></a></li>
+                    </ul>
+                </div>
+                <div class="row-2">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about-us.html">About</a></li>
+                        <li><a href="http://localhost:8050/cinemaList.html" class="active">Cinemas</a></li>
+                        <li><a href="contact-us.html">Contacts</a></li>
+                        <li class="last"><a href="sitemap.html">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+            <h3><span>Cinema Seats Reservation</span></h3>
+<h1>Seats Booking</h1>
+<div id="seats">
+    <!-- Seats will be displayed here -->
+</div>
+
+<p>Selected Seats: <span id="selected-seats">0</span></p>
+<p>
+    Email: <input type="email" id="client-email" required>
+</p>
+<p>
+    Ticket Type:
+    <select id="ticket-type">
+        <option value="ADULTS">Adults</option>
+        <option value="CHILDREN">Children</option>
+    </select>
+</p>
+<button id="book-button">Book Selected Seats</button>
+<script>
+    const seatsContainer = document.getElementById('seats');
+    const selectedSeatsContainer = document.getElementById('selected-seats');
+    let selectedSeats = 0;
+    const urlParams = new URLSearchParams(window.location.search);
+    const hallId = urlParams.get('hallId');
+    const sessionId = urlParams.get('sessionId');
+    const cinemaId = urlParams.get('cinemaId');
+    const today = new Date();
+    const formattedDate = [
+        today.getDate().toString().padStart(2, '0'),
+        (today.getMonth() + 1).toString().padStart(2, '0'),
+        today.getFullYear()
+    ].join('-');
+    const seatsUrl = `http://localhost:8050/api/cinema/get/session/by/cinema/${cinemaId}?date=${formattedDate}&language=EN`;
+
+    function updateSelectedSeatsCount() {
+        const selectedSeatsList = document.querySelectorAll('.seat.selected');
+        selectedSeats = selectedSeatsList.length;
+        selectedSeatsContainer.textContent = selectedSeats;
+    }
+
+    fetch(seatsUrl)
+        .then(response => response.json())
+        .then(data => {
+            const seats = data.hallResponse[0].sessionResponse[0].seatsResponse;
+
+            seats.forEach(place => {
+                const seatElement = document.createElement('div');
+                seatElement.classList.add('seat');
+                seatElement.textContent = `${place.row}-${place.place}`;
+                if (place.booked) {
+                    seatElement.classList.add('booked');
+                    seatElement.classList.remove('available');
+                } else {
+                    seatElement.classList.add('available');
+                    seatElement.addEventListener('click', () => {
+                        seatElement.classList.toggle('selected');
+                        updateSelectedSeatsCount();
+                        setTimeout(() => {
+                            seatElement.classList.toggle('selected');
+                            updateSelectedSeatsCount();
+                        }, 7000);
+                    });
+                }
+                seatsContainer.appendChild(seatElement);
+            });
+        })
+        .catch(error => console.error('Error fetching seats:', error));
+
+    const bookButton = document.getElementById('book-button');
+
+    bookButton.addEventListener('click', bookSeats);
+
+    function bookSeats() {
+    const emailInput = document.getElementById('client-email');
+    const clientEmail = emailInput.value;
+    const ticketTypeSelect = document.getElementById('ticket-type');
+    const ticketType = ticketTypeSelect.value;
+
+    if (!clientEmail) {
+        alert('Please enter your email.');
+        return;
+    }
+
+    const selectedSeatsList = document.querySelectorAll('.seat.selected');
+    const seatsArray = Array.from(selectedSeatsList).map(seat => {
+        const seatNumber = seat.textContent.split('-');
+        const row = parseInt(seatNumber[0]);
+        const place = parseInt(seatNumber[1]);
+        return { row: row, place: place, type: ticketType };
+    });
+
+    const requestData = {
+        clientEmail: clientEmail,
+        idSession: sessionId,
+        seats: seatsArray
+    };
+
+    const url = 'http://localhost:8050/api/orderSession/create?language=EN';
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => {
+        if (response.ok) {
+            selectedSeatsList.forEach(seat => {
+                seat.classList.remove('available');
+                seat.classList.add('booked');
+                seat.classList.remove('selected');
+            });
+            alert('Seats booked successfully!');
+            updateSelectedSeatsCount(); // Move this line here
+        } else {
+            response.json().then(data => {
+                if (data && data.length > 0 && data[0] === "There are no tickets for this movie for children!") {
+                    alert('You cannot book children tickets for this movie.');
+                } else {
+                    alert('Failed to book seats.');
+                }
+            }).catch(error => {
+                console.error('Error parsing response:', error);
+                alert('You cannot book children tickets for this movie.');
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error booking seats:', error);
+        alert('An error occurred while booking seats.');
+    });
+}
+</script>
+
+</body>
+</html>

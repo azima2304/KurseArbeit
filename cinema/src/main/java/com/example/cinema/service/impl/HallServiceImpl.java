@@ -33,6 +33,10 @@ public class HallServiceImpl extends BaseServiceImpl<Hall, HallDto, HallMapper, 
     private final CinemaRepo cinemaRepo;
     private final SeatsService seatsService;
 
+    public int[][] getHallLayoutById(Long hallId) {
+        Hall hall = hallRepo.findById(hallId).orElseThrow(() -> new RuntimeException("Hall not found with id: " + hallId));
+        return new int[hall.getRows()][hall.getPlaces()];
+    }
 
     @Override
     public List<Hall> findByCinemaId(Long cinemaId) {
