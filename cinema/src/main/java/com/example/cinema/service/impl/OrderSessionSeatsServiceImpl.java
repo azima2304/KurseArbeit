@@ -161,7 +161,7 @@ public class OrderSessionSeatsServiceImpl extends BaseServiceImpl<OrderSessionSe
                 "Кинотеатр: " + response.getCinemaName() + "\n" +
                 "Зал: " + response.getHallName() + "\n" +
                 "Места: " + response.getSeats().toString() + "\n" +
-                "Общая стоимость: " + response.getTotalPrice() + " руб.\n\n" +
+                "Общая стоимость: " + response.getTotalPrice() + " сом\n\n" +
                 "Спасибо за ваш выбор!\n");
 
         javaMailSender.send(message);

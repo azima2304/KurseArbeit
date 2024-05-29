@@ -27,4 +27,14 @@ public class Seats {
 
     boolean isBooked;
 
+    @Override
+    public String toString() {
+        return "Seats{" +
+                "id=" + id +
+                ", row=" + row +
+                ", place=" + place +
+                ", hall=" + hall +
+                ", isBooked=" + isBooked +
+                '}';
+    }
 }
