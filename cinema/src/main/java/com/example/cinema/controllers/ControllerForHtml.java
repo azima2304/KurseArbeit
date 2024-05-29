@@ -51,4 +51,5 @@ public class ControllerForHtml {
         model.addAttribute("cinema", cinemaResponse);
         return "articles";
     }
+
 }

@@ -1,118 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Article - Article | Cinema - Free Website Template from Templates.com</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="description" content="Place your description here" />
-	<meta name="keywords" content="put, your, keyword, here" />
-	<meta name="author" content="Templates.com - website templates provider" />
-	<link href="/css/style.css" rel="stylesheet" type="text/css" />
-	<link rel="stylesheet" href="/css/movies.css">
-	<script src="/js/jquery-1.4.2.min.js" type="text/javascript"></script>
-	<script src="/js/cufon-yui.js" type="text/javascript"></script>
-	<script src="/js/cufon-replace.js" type="text/javascript"></script>
-	<script src="/js/Gill_Sans_400.font.js" type="text/javascript"></script>
-	<script src="/js/script.js" type="text/javascript"></script>
-	<!--[if lt IE 7]>
-	<script type="text/javascript" src="/js/ie_png.js"></script>
-	<script type="text/javascript">
-		ie_png.fix('.png, .link1 span, .link1');
-	</script>
-	<link href="/css/ie6.css" rel="stylesheet" type="text/css" />
-	<![endif]-->
-	<style>
-		.movie-session {
-		margin-top:20px;
-		display: flex;
-		align-items: center;
-		margin-bottom: 10px; /* Расстояние между сеансами */
-	}
+    <title>Article - Article | Cinema - Free Website Template from Templates.com</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="description" content="Place your description here"/>
+    <meta name="keywords" content="put, your, keyword, here"/>
+    <meta name="author" content="Templates.com - website templates provider"/>
+    <link href="/css/style.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="/css/movies.css">
+    <script src="/js/jquery-1.4.2.min.js" type="text/javascript"></script>
+    <script src="/js/cufon-yui.js" type="text/javascript"></script>
+    <script src="/js/cufon-replace.js" type="text/javascript"></script>
+    <script src="/js/Gill_Sans_400.font.js" type="text/javascript"></script>
+    <script src="/js/script.js" type="text/javascript"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/js/ie_png.js"></script>
+    <script type="text/javascript">
+        ie_png.fix('.png, .link1 span, .link1');
+    </script>
+    <link href="/css/ie6.css" rel="stylesheet" type="text/css"/>
+    <![endif]-->
+    <style>
+        .movie-session {
+        margin-top:20px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px; /* Расстояние между сеансами */
+    }
 
-	.session-info {
-		flex: 1; /* Растягиваем этот блок, чтобы остальные элементы выровнялись */
-		display: flex;
-		align-items: center;
-	}
+    .session-info {
+        flex: 1; /* Растягиваем этот блок, чтобы остальные элементы выровнялись */
+        display: flex;
+        align-items: center;
+    }
 
-	.session-info span,
-	.session-info .name,
-	.session-info .price {
-		margin-right: 10px; /* Расстояние между элементами внутри session-info */
-	}
+    .session-info span,
+    .session-info .name,
+    .session-info .price {
+        margin-right: 10px; /* Расстояние между элементами внутри session-info */
+    }
 
-	.buy-link {
-		margin-left: 40px; /* Отступ для ссылки "Купить" */
-	}
-	</style>
+    .buy-link {
+        margin-left: 40px; /* Отступ для ссылки "Купить" */
+    }
+    .movie-info {
+        display: none;
+    }
+    </style>
 </head>
 <body id="page4">
 <div class="tail-top">
-	<div class="tail-bottom">
-		<div id="main">
-			<!-- HEADER -->
-			<div id="header">
-				<div class="row-1">
-					<div class="fleft"><a href="index.html">Cinema <span>World</span></a></div>
-					<ul>
-						<li><a href="index.html"><img src="images/icon1.gif" alt="" /></a></li>
-						<li><a href="contact-us.html"><img src="images/icon2.gif" alt="" /></a></li>
-						<li><a href="sitemap.html"><img src="images/icon3.gif" alt="" /></a></li>
-					</ul>
-				</div>
-				<div class="row-2">
-					<ul>
-						<li><a href="index.html">Home</a></li>
-						<li><a href="about-us.html">About</a></li>
-						<li><a href="http://localhost:8050/cinemaList.html" class="active">Cinemas</a></li>
-						<li><a href="contact-us.html">Contacts</a></li>
-						<li class="last"><a href="sitemap.html">Sitemap</a></li>
-					</ul>
-				</div>
-			</div>
-			<!-- CONTENT -->
-			<div id="content">
-				<div class="ic">More Website Templates at TemplateMonster.com!</div>
-				<div class="line-hor"></div>
-				<div class="box">
-					<div class="border-right">
-						<div class="border-left">
-							<div class="inner">
-								<h3 id="cinema-name"><span>Cinema Name</span></h3>
-								<div class="movie-dates">
-									<button class="dates" onclick="loadSessions('today')">Today</button>
-									<button class="dates" onclick="loadSessions(formattedDatetmr,cinemaId)">Tomorrow</button>
-								</div>
-								<br>
-								<br>
+    <div class="tail-bottom">
+        <div id="main">
+            <!-- HEADER -->
+            <div id="header">
+                <div class="row-1">
+                    <div class="fleft"><a href="index.html">Cinema <span>World</span></a></div>
+                    <ul>
+                        <li><a href="index.html"><img src="images/icon1.gif" alt=""/></a></li>
+                        <li><a href="contact-us.html"><img src="images/icon2.gif" alt=""/></a></li>
+                        <li><a href="sitemap.html"><img src="images/icon3.gif" alt=""/></a></li>
+                    </ul>
+                </div>
+                <div class="row-2">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about-us.html">About</a></li>
+                        <li><a href="http://localhost:8050/cinemaList.html" class="active">Cinemas</a></li>
+                        <li><a href="contact-us.html">Contacts</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- CONTENT -->
+            <div id="content">
+                <div class="ic">More Website Templates at TemplateMonster.com!</div>
+                <div class="line-hor"></div>
+                <div class="box">
+                    <div class="border-right">
+                        <div class="border-left">
+                            <div class="inner">
+                                <h3 id="cinema-name"><span>Cinema Name</span></h3>
+                                <div class="movie-dates">
+                                    <button class="dates" id="td__btn">Today</button>
+                                    <button class="dates"  id = "tmr__btn" >Tomorrow
+                                    </button>
+                                </div>
+                                <br>
+                                <br>
 
-								<div class="movies" id="movies">
-									<!-- Sessions will be loaded here -->
-								</div>
-							</div>
-							<div class="movie-info" id="movie-info">
-								<!-- Add additional movie details here if needed -->
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- FOOTER -->
-			<div id="footer">
-				<div class="left">
-					<div class="right">
-						<div class="inside">Copyright - Type in your name here<br />
-							<a rel="nofollow" href="http://www.templatemonster.com/" class="new_window">Website template</a> designed by TemplateMonster.com<br />
-							<a href="http://www.templates.com/product/3d-models/" class="new_window">3D Models</a> provided by Templates.com
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                                <div class="movies" id="movies">
+                                    <!-- Sessions will be loaded here -->
+                                </div>
+                            </div>
+                            <!--                            <div class="movie-info" id="movie-info">-->
+                            <!--                                &lt;!&ndash; Add additional movie details here if needed &ndash;&gt;-->
+                            <!--                            </div>-->
+                            <div class="movie-info" id="movie-info">
+                                <img src="https://kinogo.bot/uploads/posts/2024-05/w1500_52291274.jpg"
+                                     alt="интернет купи">
+                                <div class="desc-info">Каскадёры</div>
+                                <div><strong>Year: </strong> <span id="span_year">2024</span></div>
+                                <div><strong>Genre: </strong> <span class="genre">Comedy</span></div>
+                                <div><strong>Duration: </strong> <span class="duration">126 min</span></div>
+                                <div><strong>Actors: </strong> <span class="actors">Райан Гослинг, Эмили Блант</span> </div>
+                                <div><strong>Country: </strong> <span class="country">USA</span> </div>
+                                <div><strong>Age: </strong> <span class="age">18+</span> </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FOOTER -->
+            <div id="footer">
+                <div class="left">
+                    <div class="right">
+                        <div class="inside">Copyright - Type in your name here<br/>
+                            <a rel="nofollow" href="http://www.templatemonster.com/" class="new_window">Website
+                                template</a> designed by TemplateMonster.com<br/>
+                            <a href="http://www.templates.com/product/3d-models/" class="new_window">3D Models</a>
+                            provided by Templates.com
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript"> Cufon.now(); </script>
 <script type="text/javascript">
-	document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
         const urlParams = new URLSearchParams(window.location.search);
         const cinemaId = urlParams.get('cinemaId');
         const today = new Date();
@@ -122,17 +138,78 @@
             today.getFullYear()  // Год
         ].join('-');
         const tomorrow = new Date(today);
-		tomorrow.setDate(today.getDate() + 1);
+        tomorrow.setDate(today.getDate() + 1);
 
-		const formattedDatetmr = [
-			tomorrow.getDate().toString().padStart(2, '0'),    // День
-			(tomorrow.getMonth() + 1).toString().padStart(2, '0'), // Месяц (январь = 0)
-			tomorrow.getFullYear()  // Год
-		].join('-');
+        const formattedDatetmr = [
+            tomorrow.getDate().toString().padStart(2, '0'),    // День
+            (tomorrow.getMonth() + 1).toString().padStart(2, '0'), // Месяц (январь = 0)
+            tomorrow.getFullYear()  // Год
+        ].join('-');
+        loadSessions(formattedDate, cinemaId);
+
+    });
+
+
+    var tmr__btn= document.getElementById("tmr__btn");
+    tmr__btn.addEventListener("click", function (event){
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const cinemaId = urlParams.get('cinemaId');
+        const today = new Date();
+        const formattedDate = [
+            today.getDate().toString().padStart(2, '0'),    // День
+            (today.getMonth() + 1).toString().padStart(2, '0'), // Месяц (январь = 0)
+            today.getFullYear()  // Год
+        ].join('-');
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        const formattedDatetmr = [
+            tomorrow.getDate().toString().padStart(2, '0'),    // День
+            (tomorrow.getMonth() + 1).toString().padStart(2, '0'), // Месяц (январь = 0)
+            tomorrow.getFullYear()  // Год
+        ].join('-');
+        loadSessions(formattedDatetmr, cinemaId);
+    });
+
+    var td__btn= document.getElementById("td__btn");
+    td__btn.addEventListener("click", function (event){
+        const urlParams = new URLSearchParams(window.location.search);
+        const cinemaId = urlParams.get('cinemaId');
+        const today = new Date();
+        const formattedDate = [
+            today.getDate().toString().padStart(2, '0'),    // День
+            (today.getMonth() + 1).toString().padStart(2, '0'), // Месяц (январь = 0)
+            today.getFullYear()  // Год
+        ].join('-');
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        const formattedDatetmr = [
+            tomorrow.getDate().toString().padStart(2, '0'),    // День
+            (tomorrow.getMonth() + 1).toString().padStart(2, '0'), // Месяц (январь = 0)
+            tomorrow.getFullYear()  // Год
+        ].join('-');
         loadSessions(formattedDate, cinemaId);
     });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     function loadSessions(date, cinemaId) {
+    var movie_info = document.getElementById("movie-info");
         fetch(`http://localhost:8050/api/cinema/get/session/by/cinema/${cinemaId}?date=${date}&language=EN`)
             .then(response => response.json())
             .then(data => {
@@ -140,24 +217,41 @@
                 const moviesContainer = document.getElementById('movies');
                 moviesContainer.innerHTML = ''; // Clear existing sessions
 
+                console.log(data.hallResponse);
+                localStorage.setItem("films", data.hallResponse);
                 data.hallResponse.forEach(hall => {
                     const hallDiv = document.createElement('div');
-                    hallDiv.innerHTML = `<h4>${hall.name}</h4>`;
+                    // hallDiv.innerHTML = `<h4>${hall.name}</h4>`;
                     hall.sessionResponse.forEach(session => {
                         const sessionDiv = document.createElement('div');
-            			sessionDiv.classList.add('movie-session');
+                        sessionDiv.classList.add('movie-session');
                         sessionDiv.innerHTML = `
                         <div class="session-info">
                             <div>${session.localTime}</div>
-                            <a class="name" href="#">${session.filmName}</a>
+                            <a class="name" id=${session.id} href="#">${session.filmName}</a>
+
                             <div class="price">${session.price} s</div>
                         </div>
                             <a href="/seatsbooking.html?sessionId=${session.id}&hallId=${hall.id}&cinemaId=${cinemaId}">Buy</a>
                         `;
                         hallDiv.appendChild(sessionDiv);
+
+                        sessionDiv.addEventListener("mouseover", (event) => {
+                            console.log("nigger");
+                            movie_info.style.display = "flex";
+
+
+                            movie_info.querySelector(".desc-info").innerHTML = session.filmName;
+                        });
+
+                    sessionDiv.addEventListener("mouseleave", (event) => {
+                        movie_info.style.display = "none";
+                    });
                     });
 
                     moviesContainer.appendChild(hallDiv);
+
+
                 });
             })
             .catch(error => {

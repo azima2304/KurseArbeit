@@ -32,6 +32,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 @Service
@@ -44,6 +46,7 @@ public class FilmServiceImpl extends BaseServiceImpl<Films, FilmDto, FilmMapper,
         this.cinemaService = cinemaService;
         this.seatsService = seatsService;
     }
+    private static final Logger logger = Logger.getLogger(FilmServiceImpl.class.getName());
 
     private final FilmRepo filmRepo;
     private final FileService fileService;
@@ -73,6 +76,7 @@ public class FilmServiceImpl extends BaseServiceImpl<Films, FilmDto, FilmMapper,
             save(filmDto);
             return new Response(ResourceBundle.periodMessages("created", language));
         } catch (Exception e) {
+            logger.log(Level.SEVERE, "nigger: " + e.getMessage(), e);
             throw new OperationFailed(ResourceBundle.periodMessages("operationFailed", language));
         }
     }
