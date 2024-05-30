@@ -195,19 +195,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     function loadSessions(date, cinemaId) {
     var movie_info = document.getElementById("movie-info");
         fetch(`http://localhost:8050/api/cinema/get/session/by/cinema/${cinemaId}?date=${date}&language=EN`)
@@ -241,7 +228,10 @@
                             movie_info.style.display = "flex";
 
 
-                            movie_info.querySelector(".desc-info").innerHTML = session.filmName;
+                            movie_info.querySelector(".desc-info").innerHTML = session.filmName;movie_info.querySelector(".age").innerHTML=session.age;
+                            movie_info.querySelector(".country").innerHTML=session.country;movie_info.querySelector(".duration").innerHTML=session.duration;
+                            movie_info.querySelector(".actors").innerHTML=session.description;movie_info.querySelector(".genre").innerHTML=session.genre;
+                            movie_info.querySelector(".span_year").innerHTML=session.year;
                         });
 
                     sessionDiv.addEventListener("mouseleave", (event) => {

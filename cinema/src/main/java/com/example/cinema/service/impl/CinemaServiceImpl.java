@@ -73,16 +73,14 @@ public class CinemaServiceImpl extends BaseServiceImpl<Cinema, CinemaDto, Cinema
 
 
 
+
     @Override
     public CinemaResponse allCinema(Long idCinema, Language language, String date) {
         LocalDate sessionDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-
         CinemaResponse response = new CinemaResponse();
-
         Cinema cinema = repository.findByIdCinema(idCinema);
         if (cinema==null){
-            throw new NotFoundByIDException(ResourceBundle.periodMessages("notFoundById", language));
-        }
+            throw new NotFoundByIDException(ResourceBundle.periodMessages("notFoundById", language));    }
         response.setId(cinema.getId());
         response.setLogo(cinema.getLogo());
         response.setName(cinema.getName());
@@ -91,41 +89,36 @@ public class CinemaServiceImpl extends BaseServiceImpl<Cinema, CinemaDto, Cinema
             HallResponse hallResponse = new HallResponse();
             hallResponse.setId(hall.getId());
             hallResponse.setName(hall.getName());
-
             List<SessionResponse> sessionResponses = new ArrayList<>();
             for (Session session : sessionService.findByHallAndDate(hall, sessionDate)) {
                 if (session==null){
-                    throw new NotFoundByDate(ResourceBundle.periodMessages("notFoundByDate", language));
-                }
+                throw new NotFoundByDate(ResourceBundle.periodMessages("notFoundByDate", language));            }
                 SessionResponse sessionResponse = new SessionResponse();
                 sessionResponse.setId(session.getId());
                 sessionResponse.setFilmName(session.getFilm().getName());
                 sessionResponse.setLocalDate(session.getDate());
                 sessionResponse.setLocalTime(session.getTime());
+                sessionResponse.setAge(session.getFilm().getAge());
+                sessionResponse.setYear(session.getFilm().getYear());
+                sessionResponse.setCountry(session.getFilm().getCountry());
+                sessionResponse.setGenre(session.getFilm().getGenre());
+                sessionResponse.setDescription(session.getFilm().getDescription());
+                sessionResponse.setDuration(session.getFilm().getDuration());
                 sessionResponse.setPrice(session.getPrice());
                 sessionResponse.setPriceForChildren(session.getPriceForChild());
-
                 List<SeatsResponse> seatsResponses = new ArrayList<>();
                 for (Seats seats : seatsService.findSeatsByHallID(hall.getId())) {
                     SeatsResponse seatsResponse = new SeatsResponse();
                     seatsResponse.setRow(seats.getRow());
                     seatsResponse.setPlace(seats.getPlace());
                     seatsResponse.setBooked(seats.isBooked());
-
-                    seatsResponses.add(seatsResponse);
-                }
-
+                    seatsResponses.add(seatsResponse);            }
                 sessionResponse.setSeatsResponse(seatsResponses);
-                sessionResponses.add(sessionResponse);
-            }
-
+                sessionResponses.add(sessionResponse);        }
             hallResponse.setSessionResponse(sessionResponses);
-            hallResponses.add(hallResponse);
-        }
-
+            hallResponses.add(hallResponse);    }
         response.setHallResponse(hallResponses);
         return response;
-
     }
 
     @Override
