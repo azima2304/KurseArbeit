@@ -23,4 +23,17 @@ public class SessionResponse {
     int priceForChildren;
 
     List<SeatsResponse> seatsResponse;
+
+    @Override
+    public String toString() {
+        return "SessionResponse{" +
+                "id=" + id +
+                ", filmName='" + filmName + '\'' +
+                ", localDate=" + localDate +
+                ", localTime=" + localTime +
+                ", price=" + price +
+                ", priceForChildren=" + priceForChildren +
+                ", seatsResponse=" + seatsResponse +
+                '}';
+    }
 }

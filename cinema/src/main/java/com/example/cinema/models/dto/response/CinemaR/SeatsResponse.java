@@ -14,4 +14,12 @@ public class SeatsResponse {
     int place;
     boolean isBooked;
 
+    @Override
+    public String toString() {
+        return "SeatsResponse{" +
+                "row=" + row +
+                ", place=" + place +
+                ", isBooked=" + isBooked +
+                '}';
+    }
 }

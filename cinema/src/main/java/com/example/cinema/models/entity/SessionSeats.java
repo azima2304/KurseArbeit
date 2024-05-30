@@ -35,9 +35,4 @@ public class SessionSeats extends BaseEntity {
     @Enumerated(EnumType.STRING)
     PriceType priceType;
 
-//    @Override
-//    protected void onCreate() {
-//        super.onCreate();
-//        priceType=PriceType.ADULTS;
-//    }
 }

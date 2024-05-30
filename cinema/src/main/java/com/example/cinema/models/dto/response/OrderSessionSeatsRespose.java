@@ -19,4 +19,16 @@ public class OrderSessionSeatsRespose {
     List<SeatsRequest> seats;
     int totalPrice;
     String clientEmail;
+
+    @Override
+    public String toString() {
+        return "OrderSessionSeatsRespose{" +
+                "filmName='" + filmName + '\'' +
+                ", cinemaName='" + cinemaName + '\'' +
+                ", hallName='" + hallName + '\'' +
+                ", seats=" + seats +
+                ", totalPrice=" + totalPrice +
+                ", clientEmail='" + clientEmail + '\'' +
+                '}';
+    }
 }

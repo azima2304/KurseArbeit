@@ -1,5 +1,6 @@
 package com.example.cinema.service.impl;
 
+import com.example.cinema.repo.SeatsRepo;
 import com.example.cinema.utils.Language;
 import com.example.cinema.base.BaseServiceImpl;
 import com.example.cinema.exceptions.NotFoundByIDException;
@@ -26,18 +27,21 @@ public class SessionServiceImpl extends BaseServiceImpl<Session, SessionDto, Ses
 
     private final SessionRepo sessionRepository;
 
-    public SessionServiceImpl(SessionRepo rep, SessionMapper sessionMapper, SessionRepo sessionRepository,FilmRepo filmRepo, HallRepo hallRepo) {
+    public SessionServiceImpl(SessionRepo rep, SessionMapper sessionMapper, SessionRepo sessionRepository, FilmRepo filmRepo, HallRepo hallRepo, SeatsRepo seatsRepo) {
         super(rep, sessionMapper);
         this.sessionRepository = sessionRepository;
 
         this.filmRepo = filmRepo;
         this.hallRepo = hallRepo;
+        this.seatsRepo = seatsRepo;
     }
 
 
 
     private final FilmRepo filmRepo;
     private final HallRepo hallRepo;
+    private final SeatsRepo seatsRepo;
+
     @Override
     public Response createSession(SessionCreateRequest request, Language language) {
         Long filmId = request.getFilmId();
@@ -57,10 +61,12 @@ public class SessionServiceImpl extends BaseServiceImpl<Session, SessionDto, Ses
         Hall hall = optionalHall.get();
         LocalDate dateOfSession = request.getDate();
         LocalTime timeOfSession = request.getTime();
+        LocalDateTime now = LocalDateTime.now();
         int durationOfFilm = film.getDuration();
 
         LocalDateTime sessionStart = LocalDateTime.of(dateOfSession, timeOfSession);
         LocalDateTime sessionEnd = sessionStart.plusMinutes(durationOfFilm);
+
 
 
         List<Session> sessionsInHall = sessionRepository.findByHallAndDate(hall, dateOfSession);
@@ -109,6 +115,27 @@ public class SessionServiceImpl extends BaseServiceImpl<Session, SessionDto, Ses
         return sessionRepository.findByHallAndDate(hall, date);
     }
 
+
+
+    @Override
+    public void updateSeatsStatusAfterSessionEnd(Long sessionId) {
+        Optional<Session> optionalSession = sessionRepository.findById(sessionId);
+        if (optionalSession.isPresent()) {
+            Session session = optionalSession.get();
+            LocalDateTime sessionEnd = LocalDateTime.of(session.getDate(), session.getTime()).plusMinutes(session.getFilm().getDuration());
+            LocalDateTime now = LocalDateTime.now();
+
+            if (sessionEnd.isBefore(now)) {
+                Hall hall = session.getHall();
+                Long hallId = hall.getId();
+                List<Seats> seatsList = seatsRepo.findSeatsByHallID(hallId);
+                for (Seats seat : seatsList) {
+                    seat.setBooked(false);
+                    seatsRepo.save(seat);
+                }
+            }
+        }
+    }
 
 }
 

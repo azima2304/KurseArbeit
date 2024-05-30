@@ -14,4 +14,13 @@ public class SeatsRequest {
     int row;
     int place;
     PriceType type;
+
+    @Override
+    public String toString() {
+        return "SeatsRequest{" +
+                "row=" + row +
+                ", place=" + place +
+                ", type=" + type +
+                '}';
+    }
 }

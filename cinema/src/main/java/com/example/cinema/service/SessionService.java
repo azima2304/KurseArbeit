@@ -21,4 +21,7 @@ public interface SessionService extends BaseService<SessionDto> {
 
     List<Session> findByHallAndDate(Hall hall, LocalDate date);
 
+    void updateSeatsStatusAfterSessionEnd(Long sessionId);
+
+
 }

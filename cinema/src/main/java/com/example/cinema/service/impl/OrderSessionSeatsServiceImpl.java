@@ -5,7 +5,6 @@ import com.example.cinema.base.BaseServiceImpl;
 import com.example.cinema.exceptions.AgeException;
 import com.example.cinema.exceptions.NotFoundByIDException;
 import com.example.cinema.exceptions.RowAndPlaceException;
-import com.example.cinema.exceptions.SessionCantBeException;
 import com.example.cinema.models.dto.*;
 import com.example.cinema.models.dto.request.OrderSessionSeatsCreateRequest;
 import com.example.cinema.models.dto.request.SeatsRequest;
@@ -20,6 +19,7 @@ import com.example.cinema.repo.*;
 import com.example.cinema.service.OrderService;
 import com.example.cinema.service.OrderSessionSeatsService;
 import com.example.cinema.utils.ResourceBundle;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import org.springframework.mail.javamail.JavaMailSender;
@@ -35,6 +35,7 @@ public class OrderSessionSeatsServiceImpl extends BaseServiceImpl<OrderSessionSe
     private final SeatsRepo seatsRepo;
     private final SessionSeatsRepo sessionSeatsRepo;
     private final JavaMailSender javaMailSender;
+
 
     public OrderSessionSeatsServiceImpl(OrderSessionSeatsRepo rep, OrderSessionSeatsMapper orderSessionSeatsMapper, OrderRepo orderRepo, OrderService orderService, SessionRepo sessionRepo, SeatsRepo seatsRepo, SessionSeatsRepo sessionSeatsRepo, JavaMailSender javaMailSender) {
         super(rep, orderSessionSeatsMapper);
@@ -142,13 +143,27 @@ public class OrderSessionSeatsServiceImpl extends BaseServiceImpl<OrderSessionSe
                 response.setClientEmail(request.getClientEmail());
 
                 new Response(ResourceBundle.periodMessages("created", language));
+
+            sendEmail(request.getClientEmail(), response);
         }
 
         save(OrderSessionSeatsMapper.MAPPER.toDto(orderSessionSeatsDto, context));
         return response;
     }
 
+    private void sendEmail(String to, OrderSessionSeatsRespose response) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("Ваш заказ на билеты");
+        message.setText("Уважаемый клиент,\n\n" +
+                "Ваш заказ был успешно создан.\n" +
+                "Фильм: " + response.getFilmName() + "\n" +
+                "Кинотеатр: " + response.getCinemaName() + "\n" +
+                "Зал: " + response.getHallName() + "\n" +
+                "Места: " + response.getSeats().toString() + "\n" +
+                "Общая стоимость: " + response.getTotalPrice() + " сом\n\n" +
+                "Спасибо за ваш выбор!\n");
 
+        javaMailSender.send(message);
+    }
 }
-
-
