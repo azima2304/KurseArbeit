@@ -104,6 +104,7 @@ public class CinemaServiceImpl extends BaseServiceImpl<Cinema, CinemaDto, Cinema
                 sessionResponse.setGenre(session.getFilm().getGenre());
                 sessionResponse.setDescription(session.getFilm().getDescription());
                 sessionResponse.setDuration(session.getFilm().getDuration());
+                sessionResponse.setLogo(session.getFilm().getLogo());
                 sessionResponse.setPrice(session.getPrice());
                 sessionResponse.setPriceForChildren(session.getPriceForChild());
                 List<SeatsResponse> seatsResponses = new ArrayList<>();

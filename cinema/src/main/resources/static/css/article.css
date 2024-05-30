@@ -2,3 +2,7 @@ img{
     height: 119px;
     width: 212px;
 }
+.row__header{
+    display:flex;
+    justify-content: space-between;
+}
